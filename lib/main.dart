@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nngasu_fqp_mobile/pages/authPage.dart';
+import 'package:nngasu_fqp_mobile/page/auth.dart';
 
 void main() =>  runApp(const Application());
 
 class Application extends StatelessWidget{
   const Application({Key? key}) : super(key: key);
+  static const String serverUrl = 'http://localhost:8080';
 
   @override
   Widget build(BuildContext context) {

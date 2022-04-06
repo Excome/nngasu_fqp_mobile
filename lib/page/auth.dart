@@ -81,11 +81,11 @@ class _AuthPageState extends State<AuthPage>{
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 20),
-            child: _input("Username", const Icon(Icons.email), _usernameController, false),
+            child: _input("Имя пользователя", const Icon(Icons.email), _usernameController, false),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
-            child: _input("Password", const Icon(Icons.lock), _passwordController, true),
+            child: _input("Пароль", const Icon(Icons.lock), _passwordController, true),
           ),
           const SizedBox(height: 20),
           Padding(
@@ -139,6 +139,21 @@ class _AuthPageState extends State<AuthPage>{
         ],
       );
     }
+
+/*    Widget _bottomWave(){
+      return Expanded(
+          child: Align(
+            child: ClipPath(
+              child: Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height,
+              ),
+              clipper: BottomWaveClipper(),
+            ),
+            alignment: Alignment.bottomCenter,
+          )
+      );
+    }*/
 
     void _loginUser(){
       _username = _usernameController.text;
@@ -197,10 +212,30 @@ class _AuthPageState extends State<AuthPage>{
                         )
                       ],
                     )
-                )
+                ),
               ],
             )
         )
     );
   }
 }
+/*
+class BottomWaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.moveTo(size.width, 0.0);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0.0, size.height);
+    path.lineTo(0.0, size.height + 5);
+    var secondControlPoint = Offset(size.width - (size.width / 6), size.height);
+    var secondEndPoint = Offset(size.width, 0.0);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
+
+}*/
