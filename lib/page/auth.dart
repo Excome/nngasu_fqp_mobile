@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nngasu_fqp_mobile/service/restService.dart';
 
 class AuthPage extends StatefulWidget{
   AuthPage({Key? key}) : super(key: key);
@@ -156,11 +157,15 @@ class _AuthPageState extends State<AuthPage>{
     }*/
 
     void _loginUser(){
-      _username = _usernameController.text;
-      _password = _passwordController.text;
-
-      _usernameController.clear();
-      _passwordController.clear();
+      var requestBody = {
+        'userName': _usernameController.text,
+        'password': _passwordController.text
+      }
+      try {
+        var responseBody = RestService.post('/login', requestBody);
+      } catch (e) {
+        _passwordController.clear();
+      }
     }
 
     void _registerUser(){
