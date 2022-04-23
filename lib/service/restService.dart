@@ -20,8 +20,11 @@ class RestService {
   }
 
   static Future<Map<String, dynamic>> post (String url, Map<String, dynamic> requestBody, {Map<String, String>? headers}) async{
-    var uri = Uri.parse('${Application.serverUrl}/url')
-    final response = await http.post(uri, headers: headers, body: requestBody);
+    var uri = Uri.parse('${Application.serverUrl}$url');
+    headers = {
+      HttpHeaders.contentTypeHeader: 'application/json'
+    };
+    final response = await http.post(uri, headers: headers, body: jsonEncode(requestBody));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -31,11 +34,21 @@ class RestService {
           '\nerrorCode: ${body['code']},'
           '\nmessage: ${body['message']}');
     }
-
-    return null;
   }
 
-// Future<Map<String, dynamic>> put(){}
+  static Future<Map<String, dynamic>> put(String url, Map<String, dynamic> requestBody, {Map<String, String>? headers}) async {
+    var uri = Uri.parse('${Application.serverUrl}$url');
+    final response = await http.put(uri, headers: headers, body: requestBody);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      var body = jsonDecode(response.body);
+      throw HttpException('Failed to execute post request for url: $uri},'
+          '\nerrorCode: ${body['code']},'
+          '\nmessage: ${body['message']}');
+    }
+  }
 
 // Future<Map<String, dynamic>> delete(){}
 }

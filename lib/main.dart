@@ -5,7 +5,7 @@ void main() =>  runApp(const Application());
 
 class Application extends StatelessWidget{
   const Application({Key? key}) : super(key: key);
-  static const String serverUrl = 'http://localhost:8080';
+  static const String serverUrl = 'http://10.0.2.2:8080';
 
   @override
   Widget build(BuildContext context) {

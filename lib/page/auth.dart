@@ -28,10 +28,20 @@ class _AuthPageState extends State<AuthPage>{
   @override
   Widget build(BuildContext context) {
     Widget _logo(){
-      return const Padding(
+      return  const Padding(
         padding: EdgeInsets.only(top: 150),
         child: Align(
-          child: Text('NNGASU', style: TextStyle(fontSize: 65, fontWeight: FontWeight.bold, color: Colors.white),),
+              child: Text('NNGASU', style: TextStyle(fontSize: 65, fontWeight: FontWeight.bold, color: Colors.white),),
+            ),
+        );
+    }
+
+    Widget _version(){
+      return const Align(
+        alignment: Alignment.bottomRight,
+        child: Padding(
+          padding: EdgeInsets.only(top: 250, right: 10),
+          child: Text('v0.1alfa', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white))
         ),
       );
     }
@@ -141,41 +151,38 @@ class _AuthPageState extends State<AuthPage>{
       );
     }
 
-/*    Widget _bottomWave(){
-      return Expanded(
-          child: Align(
-            child: ClipPath(
-              child: Container(
-                color: Colors.white,
-                height: MediaQuery.of(context).size.height,
-              ),
-              clipper: BottomWaveClipper(),
-            ),
-            alignment: Alignment.bottomCenter,
-          )
-      );
-    }*/
-
-    void _loginUser(){
+    void _loginUser() async {
       var requestBody = {
-        'userName': _usernameController.text,
+        'username': _usernameController.text,
         'password': _passwordController.text
-      }
+      };
       try {
-        var responseBody = RestService.post('/login', requestBody);
+        var body =  await RestService.post('/login', requestBody);
+        print("token: " + body['token']);
       } catch (e) {
+        print(e);
         _passwordController.clear();
       }
     }
 
-    void _registerUser(){
-      _username = _usernameController.text;
-      _email = _emailController.text;
-      _firstName = _firstNameController.text;
-      _surName = _surNameController.text;
-      _password = _passwordController.text;
-      _passwordConf = _passwordConfController.text;
+    void _registerUser() async {
+      var requestBody = {
+      'userName': _usernameController.text,
+      'email': _emailController.text,
+      'firstName': _firstNameController.text,
+      'surName': _surNameController.text,
+      'password': _passwordController.text,
+      'passwordConf': _passwordConfController.text
+    };
 
+      try {
+        final body = await RestService.post('/registration', requestBody);
+        print(body);
+      } catch (e){
+        print(e);
+        _passwordController.clear();
+        _passwordConfController.clear();
+      }
 
     }
     return Scaffold(
@@ -218,29 +225,10 @@ class _AuthPageState extends State<AuthPage>{
                       ],
                     )
                 ),
+                _version()
               ],
             )
         )
     );
   }
 }
-/*
-class BottomWaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.moveTo(size.width, 0.0);
-    path.lineTo(size.width, size.height);
-    path.lineTo(0.0, size.height);
-    path.lineTo(0.0, size.height + 5);
-    var secondControlPoint = Offset(size.width - (size.width / 6), size.height);
-    var secondEndPoint = Offset(size.width, 0.0);
-    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
-
-}*/
