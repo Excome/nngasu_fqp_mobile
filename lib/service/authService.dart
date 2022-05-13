@@ -5,10 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:nngasu_fqp_mobile/domain/user.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
 
+import 'httpClient.dart';
+
 class AuthService {
-  Future<User> fetchUser(String userName, String token) async{
+  static Future<User> fetchUser(String userName, String token) async {
     var url = Uri.parse('${Application.serverUrl}/users/$userName');
-    var headersMap = {HttpHeaders.authorizationHeader:'Bearer $token'};
+    var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
     final response = await http.get(url, headers: headersMap);
 
     if (response.statusCode == 200) {
@@ -18,32 +20,26 @@ class AuthService {
     }
   }
 
-  Future<User> registerUser(User user) async {
-    final response = await http.post(
-        Uri.parse('${Application.serverUrl}/registration'),
-        body: user.toJson()
-    );
-
-    if (response.statusCode == 200){
-      return User.fromJson(jsonDecode(response.body));
-    } else {
-      // var responseBody = jsonDecode(response.body);
-      throw Exception("Failed to register user '${user.userName}': ");
+  static Future<User> register(User user) async {
+    try {
+      var requestBody = user.toJson();
+      var responseBody = await HttpClient.post('/registration', requestBody);
+      return User.fromJson(responseBody);
+    } catch (e) {
+      Application.logger.w("Exception while user registration: $e");
+      return user;
     }
   }
 
   // Returned string with jwtToken for server auth
-  Future<String> loginUser(User user) async {
-    final response = await http.post(
-      Uri.parse('${Application.serverUrl}/login'),
-      body: user.toJson()
-    );
-
-    if (response.statusCode == 200){
-      var body = jsonDecode(response.body);
-      return body['token'].toString();
-    } else {
-      throw Exception("Failed to login user '${user.userName}'");
+  static Future<String> login(String username, String password) async {
+    try {
+      var requestBody = {"username": username, "password": password};
+      final responseBody = await HttpClient.post('/login', requestBody);
+      return responseBody['token'];
+    } catch (e) {
+      Application.logger.e("Failed to login '$username' user: $e");
+      return 'failure';
     }
   }
 }
