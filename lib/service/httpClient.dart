@@ -26,7 +26,9 @@ class HttpClient {
   static Future<Map<String, dynamic>> post (String url, Map<String, dynamic> requestBody, {Map<String, String>? headers}) async{
     var uri = Uri.parse('${Application.serverUrl}$url');
     var requestHeaders = {HttpHeaders.contentTypeHeader: 'application/json'};
-    requestHeaders.addAll(headers!);
+    if (headers != null) {
+      requestHeaders.addAll(headers);
+    }
     Application.logger.d(requestBody);
     final response = await http.post(uri, headers: requestHeaders, body: jsonEncode(requestBody));
     var responseBody = jsonDecode(response.body);

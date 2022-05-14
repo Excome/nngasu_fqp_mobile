@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nngasu_fqp_mobile/domain/user.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
+import 'package:nngasu_fqp_mobile/screen/home.dart';
 import 'package:nngasu_fqp_mobile/service/authService.dart';
 
 class AuthPage extends StatefulWidget {
@@ -164,9 +165,15 @@ class _AuthPageState extends State<AuthPage> {
     }
 
     void _loginUser() async {
-      var token = await AuthService.login(_usernameController.text, _passwordController.text);
-      if (token == "failure") {
-        _passwordController.clear();
+      var _username = _usernameController.text.trim();
+      var _password = _passwordController.text.trim();
+      var token = await AuthService.login(_username, _password);
+      if (token != 'failure') {
+        Application.token = token;
+        Application.crrUsername = _usernameController.text;
+        setState(() { });
+      } else {
+        // _passwordController.clear();
       }
     }
 
@@ -184,7 +191,7 @@ class _AuthPageState extends State<AuthPage> {
 
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: SingleChildScrollView(
+        body: Application.token.isNotEmpty ? HomePage() : SingleChildScrollView(
             child: Column(
           children: <Widget>[
             _logo(),
