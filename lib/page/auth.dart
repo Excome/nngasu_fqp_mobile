@@ -27,9 +27,9 @@ class _AuthPageState extends State<AuthPage> {
         padding: EdgeInsets.only(top: 150),
         child: Align(
           child: Text(
-            'NNGASU',
+            'ННГАСУ | ТРО',
             style: TextStyle(
-                fontSize: 65, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 54, fontWeight: FontWeight.bold, color: Color.fromRGBO(0, 69, 136, 1)),
           ),
         ),
       );
@@ -44,7 +44,7 @@ class _AuthPageState extends State<AuthPage> {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white))),
+                    color: Colors.black))),
       );
     }
 
@@ -55,21 +55,21 @@ class _AuthPageState extends State<AuthPage> {
         child: TextField(
           controller: controller,
           obscureText: obscure,
-          style: const TextStyle(fontSize: 20, color: Colors.white),
+          style: const TextStyle(fontSize: 20, color: Colors.black),
           decoration: InputDecoration(
               hintStyle: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white30),
+                  color: Colors.black38),
               hintText: placeholder,
               focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 4)),
+                  borderSide: BorderSide(color: Color.fromRGBO(0, 69, 136, 0.8), width: 4)),
               enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white54, width: 4)),
+                  borderSide: BorderSide(color: Color.fromRGBO(0, 69, 136, 0.5), width: 4)),
               prefixIcon: Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: IconTheme(
-                  data: const IconThemeData(color: Colors.white),
+                  data: const IconThemeData(color: Color.fromRGBO(239, 103, 0, 1)),
                   child: icon,
                 ),
               )),
@@ -81,7 +81,7 @@ class _AuthPageState extends State<AuthPage> {
       return RaisedButton(
         splashColor: Theme.of(context).primaryColor,
         highlightColor: Theme.of(context).primaryColor,
-        color: Colors.white,
+        color: const Color.fromRGBO(239, 103, 0, 1),
         child: Text(text,
             style: TextStyle(
                 fontSize: 20,
@@ -98,7 +98,7 @@ class _AuthPageState extends State<AuthPage> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 20),
-            child: _input("Имя пользователя", const Icon(Icons.email),
+            child: _input("Имя пользователя", const Icon(Icons.person),
                 _usernameController, false),
           ),
           Padding(
@@ -134,12 +134,12 @@ class _AuthPageState extends State<AuthPage> {
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
             child: _input(
-                "Имя", const Icon(Icons.person), _firstNameController, false),
+                "Имя", const Icon(Icons.arrow_drop_up_sharp), _firstNameController, false),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
             child: _input(
-                "Фамилия", const Icon(Icons.person), _surNameController, false),
+                "Фамилия", const Icon(Icons.arrow_drop_up_sharp), _surNameController, false),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
@@ -197,7 +197,7 @@ class _AuthPageState extends State<AuthPage> {
                         child: GestureDetector(
                           child: const Text('Нет аккаунта? Зарегистрироваться!',
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.white)),
+                                  TextStyle(fontSize: 20, color: Colors.black)),
                           onTap: () {
                             setState(() {
                               _showLogin = false;
@@ -215,7 +215,7 @@ class _AuthPageState extends State<AuthPage> {
                         child: GestureDetector(
                           child: const Text('Уже есть аакаунт? Войти!',
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.white)),
+                                  TextStyle(fontSize: 20, color: Colors.black)),
                           onTap: () {
                             setState(() {
                               _showLogin = true;
