@@ -16,7 +16,8 @@ class Application extends StatelessWidget{
   static Color nngasuOrangeColor = const Color.fromRGBO(239, 103, 0, 1);
 
   static String crrUsername = "administrator";
-  static String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmlzdHJhdG9yIiwiZXhwIjoxNjUzNzcxNjAwfQ.yo1jZj_Y2oNgPBJ3e9um2az1dIoTwGvnUYF46SQvyFA2XD4AKeoBwolhQSTkeUwjP8wiz4NdKj3CwdbRCFveXg";
+  // static String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmlzdHJhdG9yIiwiZXhwIjoxNjUzNzcxNjAwfQ.yo1jZj_Y2oNgPBJ3e9um2az1dIoTwGvnUYF46SQvyFA2XD4AKeoBwolhQSTkeUwjP8wiz4NdKj3CwdbRCFveXg";
+  static String token = "";
   // Color.fromRGBO(0, 69, 136, 1) - Синий цвет ННГАСУ
   // Color.fromRGBO(239, 103, 0, 1) - Оранжевый цвет ННГАСУ
   @override
@@ -28,7 +29,7 @@ class Application extends StatelessWidget{
         textTheme: const TextTheme(titleLarge: TextStyle(color: Colors.black))
       ),
       // home: AuthPage(),
-      home: HomePage(),
+      home: token.isEmpty ? AuthPage() : HomePage(),
     );
   }
 

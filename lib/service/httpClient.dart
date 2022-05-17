@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 
 
 class HttpClient {
-  static Future<Map<String, dynamic>> get(String url, {Map<String, String>? headers}) async{
-    var uri = Uri.parse('${Application.serverUrl}/$url');
+  static Future<dynamic> get(String url, {Map<String, String>? headers}) async{
+    var uri = Uri.parse('${Application.serverUrl}$url');
     var requestHeaders = {HttpHeaders.contentTypeHeader: 'application/json'};
     requestHeaders.addAll(headers!);
     final response = await http.get(uri, headers: requestHeaders);
@@ -23,7 +23,7 @@ class HttpClient {
     }
   }
 
-  static Future<Map<String, dynamic>> post (String url, Map<String, dynamic> requestBody, {Map<String, String>? headers}) async{
+  static Future<dynamic> post (String url, Map<String, dynamic> requestBody, {Map<String, String>? headers}) async{
     var uri = Uri.parse('${Application.serverUrl}$url');
     var requestHeaders = {HttpHeaders.contentTypeHeader: 'application/json'};
     if (headers != null) {
@@ -43,7 +43,7 @@ class HttpClient {
     }
   }
 
-  static Future<Map<String, dynamic>> put(String url, Map<String, dynamic> requestBody, {Map<String, String>? headers}) async {
+  static Future<dynamic> put(String url, Map<String, dynamic> requestBody, {Map<String, String>? headers}) async {
     var uri = Uri.parse('${Application.serverUrl}$url');
     var requestHeaders = {HttpHeaders.contentTypeHeader: 'application/json'};
     requestHeaders.addAll(headers!);
@@ -60,7 +60,7 @@ class HttpClient {
     }
   }
 
-  static Future<Map<String, dynamic>> delete(String url, Map<String, dynamic> requestBody, {Map<String, String>? headers}) async {
+  static Future<dynamic> delete(String url, Map<String, dynamic> requestBody, {Map<String, String>? headers}) async {
     var uri = Uri.parse('${Application.serverUrl}$url');
     var requestHeaders = {HttpHeaders.contentTypeHeader: 'application/json'};
     requestHeaders.addAll(headers!);

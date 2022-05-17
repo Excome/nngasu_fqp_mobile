@@ -178,13 +178,13 @@ class _AuthPageState extends State<AuthPage> {
     }
 
     void _registerUser() async {
-      var user = User.forRegister(
+      var user = User(
           _usernameController.text,
           _emailController.text,
-          _firstNameController.text,
-          _surNameController.text,
-          _passwordController.text,
-          _passwordConfController.text);
+          firstName: _firstNameController.text,
+          surName: _surNameController.text,
+          pass: _passwordController.text,
+          passConfirm: _passwordConfController.text);
       var newUser = await AuthService.register(user);
       Application.logger.d(newUser);
     }
