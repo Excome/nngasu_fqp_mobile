@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.nngasu.nngasu_fqp_mobile">
    <application
-        android:label="nngasu_fqp_mobile"
+        android:label="ННГАСУ | ТРО"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
