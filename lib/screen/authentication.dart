@@ -19,6 +19,7 @@ class _AuthPageState extends State<AuthPage> {
   final TextEditingController _passwordConfController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _surNameController = TextEditingController();
+  final TextEditingController _serverApiController = TextEditingController(text: Application.serverUrl);
   bool _showLogin = true;
 
   @override
@@ -46,6 +47,19 @@ class _AuthPageState extends State<AuthPage> {
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black))),
+      );
+    }
+
+    Widget _serverApi() {
+      return Container(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 200),
+        child: TextField(
+            controller: _serverApiController,
+            onChanged: (value) => {Application.serverUrl = _serverApiController.text},
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Описание',
+            )),
       );
     }
 
@@ -191,7 +205,7 @@ class _AuthPageState extends State<AuthPage> {
 
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: Application.token.isNotEmpty ? HomePage() : SingleChildScrollView(
+        body: Application.token.isNotEmpty ? const HomePage() : SingleChildScrollView(
             child: Column(
           children: <Widget>[
             _logo(),
@@ -232,6 +246,7 @@ class _AuthPageState extends State<AuthPage> {
                       )
                     ],
                   )),
+            _serverApi(),
             _version()
           ],
         )));

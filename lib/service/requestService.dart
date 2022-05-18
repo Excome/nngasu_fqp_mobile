@@ -35,4 +35,17 @@ class RequestService {
       return Request(User("",""), "", []);
     }
   }
+
+  static Future<Request> createRequest(Request request, String token) async {
+    try {
+      var url = '/requests';
+      var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
+      var requestBody = request.toJson();
+      var responseBody = await HttpClient.post(url, requestBody, headers: headersMap);
+      return Request.fromJson(responseBody);
+    } catch (e) {
+      Application.logger.w("Failed to create request with '$request' id: $e");
+      return Request(User("",""), "", []);
+    }
+  }
 }

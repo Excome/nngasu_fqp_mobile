@@ -29,14 +29,28 @@ class Request {
         equipments.add(Equipment.fromJson(equipment));
       }
     }
-    return Request(
-        author,
-        json['audience'],
-        equipments,
+    return Request(author, json['audience'], equipments,
         id: json['id'],
         responsible: responsible,
-        description :json['description'],
-        status: json['status']
-    );
+        description: json['description'],
+        status: json['status']);
+  }
+
+  Map<String, dynamic> toJson() {
+    List<Map<String, dynamic>> equipmentJson = [];
+    if (equipment.isNotEmpty) {
+      for (var tmp in equipment) {
+        equipmentJson.add(tmp.toJson());
+      }
+    }
+    return {
+      "id": id,
+      "author": author.toJson(),
+      "responsible": responsible.userName.isEmpty ? null : responsible,
+      "equipment": equipmentJson,
+      "audience": audience,
+      "description": description,
+      "status": status
+    };
   }
 }

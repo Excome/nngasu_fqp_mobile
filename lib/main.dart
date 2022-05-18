@@ -9,7 +9,7 @@ void main() =>  runApp(const Application());
 
 class Application extends StatelessWidget{
   const Application({Key? key}) : super(key: key);
-  static const String serverUrl = 'http://192.168.0.198:8080';
+  static String serverUrl = 'http://192.168.0.198:8080';
   // static const String serverUrl = 'http://195.122.251.100:8080';
   static Logger logger = Logger();
   static Color nngasuBlueColor = const Color.fromRGBO(0, 69, 136, 1);

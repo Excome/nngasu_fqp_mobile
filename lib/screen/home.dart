@@ -28,14 +28,16 @@ class _HomePageState extends State<HomePage> {
           title: const Text('ННГАСУ | ТРО'),
           leading: const Icon(Icons.home_rounded),
           backgroundColor: Application.nngasuOrangeColor),
-      // body: sectionIndex == 0 ? RequestList() : Container(),
       body: _widgetOptions.elementAt(sectionIndex),
-      floatingActionButton: FloatingActionButton(
-        onPressed: ()=>{Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateRequest()))},
-        tooltip: "Создать заявку",
-        child: const Icon(Icons.add),
-        elevation: 4.0,
-        backgroundColor: Application.nngasuOrangeColor,
+      floatingActionButton: Visibility(
+        visible: sectionIndex == 0,
+          child: FloatingActionButton(
+            onPressed: ()=>{Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateRequest()))},
+            tooltip: "Создать заявку",
+            child: const Icon(Icons.add),
+            elevation: 4.0,
+            backgroundColor: Application.nngasuOrangeColor,
+          )
       ),
       bottomNavigationBar: navigationBar(sectionIndex),
     );
