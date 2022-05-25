@@ -11,7 +11,7 @@ class HttpClient {
     var requestHeaders = {HttpHeaders.contentTypeHeader: 'application/json'};
     requestHeaders.addAll(headers!);
     final response = await http.get(uri, headers: requestHeaders);
-    var responseBody = jsonDecode(response.body);
+    var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200){
       return responseBody;
     } else {
@@ -31,7 +31,7 @@ class HttpClient {
     }
     Application.logger.d(requestBody);
     final response = await http.post(uri, headers: requestHeaders, body: jsonEncode(requestBody));
-    var responseBody = jsonDecode(response.body);
+    var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
       return responseBody;
     } else {
@@ -48,7 +48,7 @@ class HttpClient {
     var requestHeaders = {HttpHeaders.contentTypeHeader: 'application/json'};
     requestHeaders.addAll(headers!);
     final response = await http.put(uri, headers: requestHeaders, body: requestBody);
-    var responseBody = jsonDecode(response.body);
+    var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
       return responseBody;
     } else {
@@ -65,7 +65,7 @@ class HttpClient {
     var requestHeaders = {HttpHeaders.contentTypeHeader: 'application/json'};
     requestHeaders.addAll(headers!);
     final response = await http.delete(uri, headers: requestHeaders, body: requestBody);
-    var responseBody = jsonDecode(response.body);
+    var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
       return responseBody;
     } else {

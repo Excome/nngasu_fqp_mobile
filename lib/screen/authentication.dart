@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nngasu_fqp_mobile/domain/user.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
 import 'package:nngasu_fqp_mobile/screen/home.dart';
@@ -41,7 +42,7 @@ class _AuthPageState extends State<AuthPage> {
       return const Align(
         alignment: Alignment.bottomRight,
         child: Padding(
-            padding: EdgeInsets.only(top: 250, right: 10),
+            padding: EdgeInsets.only(top: 50, right: 10),
             child: Text('v0.1alfa',
                 style: TextStyle(
                     fontSize: 16,
@@ -179,11 +180,17 @@ class _AuthPageState extends State<AuthPage> {
     }
 
     void _loginUser() async {
+      var authStore = await Application.db.collection('auth').doc(Application.dbAuthId).get();
       var _username = _usernameController.text.trim();
       var _password = _passwordController.text.trim();
       var token = await AuthService.login(_username, _password);
       if (token != 'failure') {
+        authStore = authStore ?? {};
+        authStore['token'] = token;
+        authStore['userName'] = _username;
+        Application.db.collection("auth").doc(Application.dbAuthId).set(authStore);
         Application.token = token;
+        Application.crrUsername = _username;
         Application.crrUsername = _usernameController.text;
         setState(() { });
       } else {
@@ -203,52 +210,68 @@ class _AuthPageState extends State<AuthPage> {
       Application.logger.d(newUser);
     }
 
-    return Scaffold(
+    return Application.token.isNotEmpty ? HomePage() :
+      Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         body: Application.token.isNotEmpty ? const HomePage() : SingleChildScrollView(
             child: Column(
-          children: <Widget>[
-            _logo(),
-            (_showLogin
-                ? Column(
-                    children: <Widget>[
-                      _loginForm('ВОЙТИ', _loginUser),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: GestureDetector(
-                          child: const Text('Нет аккаунта? Зарегистрироваться!',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black)),
-                          onTap: () {
-                            setState(() {
-                              _showLogin = false;
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  )
-                : Column(
-                    children: <Widget>[
-                      _registrationForm('ЗАРЕГИСТРИРОВАТЬСЯ', _registerUser),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 40),
-                        child: GestureDetector(
-                          child: const Text('Уже есть аакаунт? Войти!',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black)),
-                          onTap: () {
-                            setState(() {
-                              _showLogin = true;
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  )),
-            _serverApi(),
-            _version()
-          ],
-        )));
+              children: <Widget>[
+                _logo(),
+                (_showLogin
+                    ? Column(
+                  children: <Widget>[
+                    _loginForm('ВОЙТИ', _loginUser),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: GestureDetector(
+                        child: const Text('Нет аккаунта? Зарегистрироваться!',
+                            style:
+                            TextStyle(fontSize: 20, color: Colors.black)),
+                        onTap: () {
+                          setState(() {
+                            _showLogin = false;
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                )
+                    : Column(
+                  children: <Widget>[
+                    _registrationForm('ЗАРЕГИСТРИРОВАТЬСЯ', _registerUser),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, bottom: 40),
+                      child: GestureDetector(
+                        child: const Text('Уже есть аккаунт? Войти!',
+                            style:
+                            TextStyle(fontSize: 20, color: Colors.black)),
+                        onTap: () {
+                          setState(() {
+                            _showLogin = true;
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                )),
+                _serverApi(),
+                _version()
+              ],
+            )));
+  }
+
+  void _checkAuth() async {
+    var authMap = await Application.db.collection('auth').doc(
+        Application.dbAuthId).get();
+    if (authMap != null) {
+      setState(() {
+        Application.token = authMap['token'] ?? "";
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    _checkAuth();
   }
 }

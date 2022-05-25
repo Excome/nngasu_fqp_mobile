@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nngasu_fqp_mobile/component/request-list.dart';
 import 'package:nngasu_fqp_mobile/domain/user.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
+import 'package:nngasu_fqp_mobile/screen/authentication.dart';
 import 'package:nngasu_fqp_mobile/screen/createRequest.dart';
+import 'package:nngasu_fqp_mobile/screen/userProfile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     RequestList(),
     Scaffold(),
-    Scaffold()
+    UserProfile()
   ];
   int sectionIndex = 0;
 
@@ -25,14 +28,19 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarColor: Application.nngasuOrangeColor,
+              statusBarIconBrightness: Brightness.light,
+              statusBarBrightness: Brightness.light
+          ),
           title: const Text('ННГАСУ | ТРО'),
           leading: const Icon(Icons.home_rounded),
           backgroundColor: Application.nngasuOrangeColor),
       body: _widgetOptions.elementAt(sectionIndex),
       floatingActionButton: Visibility(
-        visible: sectionIndex == 0,
+          visible: sectionIndex == 0,
           child: FloatingActionButton(
-            onPressed: ()=>{Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateRequest()))},
+            onPressed: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateRequest()))},
             tooltip: "Создать заявку",
             child: const Icon(Icons.add),
             elevation: 4.0,

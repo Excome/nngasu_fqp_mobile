@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nngasu_fqp_mobile/domain/equipment.dart';
 import 'package:nngasu_fqp_mobile/domain/request.dart';
 import 'package:nngasu_fqp_mobile/service/equipmentService.dart';
@@ -91,12 +92,18 @@ class _CreateRequestState extends State<CreateRequest> {
     var equipment = _selectedEquipments.map((equipment) =>Equipment(equipment.replaceAll(RegExp(r'.*: '), ""), 0, "", "")).toList();
     var request = Request(author, audience, equipment, description: description);
     var response = await RequestService.createRequest(request, Application.token);
+    // _selectedEquipments.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Application.nngasuOrangeColor,
+            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.light
+        ),
           title: const Text('ННГАСУ | ТРО | Создание заявки'),
           backgroundColor: Application.nngasuOrangeColor),
       body: Padding(

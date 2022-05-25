@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nngasu_fqp_mobile/domain/request.dart';
-import 'package:nngasu_fqp_mobile/domain/user.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
 import 'package:nngasu_fqp_mobile/screen/requestDetail.dart';
 import 'package:nngasu_fqp_mobile/service/requestService.dart';
@@ -14,23 +13,34 @@ class RequestList extends StatefulWidget {
 }
 
 class _RequestListState extends State<RequestList> {
-  List<Request> requests = [];
+  final ScrollController _scrollController = ScrollController();
+  final List<Request> _requests = [];
+  int _page = 0;
+  bool _isLoading = true;
+
   @override
   void initState()  {
-    fetchRequests(context);
+    fetchRequests(_page);
+    _scrollController.addListener(pagination);
     super.initState();
   }
 
-  void fetchRequests(context) async {
-    var requestList = await RequestService.fetchRequests(0, Application.token);
-    setState(() => requests.addAll(requestList));
+  void fetchRequests(int page) async {
+    var requestList = await RequestService.fetchRequests(page, Application.token);
+    if (requestList.isNotEmpty) {
+      _page += 1;
+      setState(() => _requests.addAll(requestList));
+    } else {
+      _isLoading = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var requestList = Expanded(
         child: ListView.builder(
-            itemCount: requests.length,
+          controller: _scrollController,
+            itemCount: _requests.length,
             itemBuilder: (context, index) {
               return Card(
                 elevation: 2.0,
@@ -43,35 +53,34 @@ class _RequestListState extends State<RequestList> {
                       alignment: Alignment.center,
                       width: 50,
                       padding: const EdgeInsets.only(right: 12),
-                      child: Text(requests[index].id.toString(),
-                          style: TextStyle(
+                      child: Text(_requests[index].id.toString(),
+                          style: const TextStyle(
                               fontSize: 18,
                               color: Application.nngasuBlueColor)),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         border: Border(
                             right: BorderSide(
                                 width: 1,
                                 color: Application.nngasuOrangeColor)),
                       ),
                     ),
-                    title: Text("Ауд.: ${requests[index].audience}",
-                        style: TextStyle(
+                    title: Text("Ауд.: ${_requests[index].audience}",
+                        style: const TextStyle(
                             fontSize: 18, color: Application.nngasuBlueColor)),
                     subtitle: Text(
-                        // "Автор: ${requests[index].author.surName} ${requests[index].author.firstName}",
-                        "Автор: ${requests[index].author.userName}",
+                        "Автор: ${_requests[index].author.surName} ${_requests[index].author.firstName}",
                         style:
                             const TextStyle(fontSize: 16, color: Colors.black)),
                     trailing: Container(
                       alignment: Alignment.centerRight,
                       width: 90,
                       child: Text(
-                        requests[index].status ? "Выполнено" : "Не выполнено",
-                        style: TextStyle(color: requests[index].status ? Colors.green : Colors.red),
+                        _requests[index].status ? "Выполнено" : "Не выполнено",
+                        style: TextStyle(color: _requests[index].status ? Colors.green : Colors.red),
                       ),
                     ),
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => RequestDetail(request: requests[index],)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => RequestDetail(request: _requests[index],)));
                     },
                   ),
                 ),
@@ -81,5 +90,11 @@ class _RequestListState extends State<RequestList> {
     return Column(
       children: <Widget>[requestList],
     );
+  }
+
+  void pagination() {
+    if (_scrollController.position.extentAfter <= 0 && _isLoading) {
+      fetchRequests(_page);
+    }
   }
 }

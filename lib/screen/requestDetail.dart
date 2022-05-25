@@ -82,8 +82,8 @@ class _RequestDetailState extends State<RequestDetail> {
                 _textField(request.audience, "Аудитория", _audienceCntrl),
                 _textField("${request.author.surName} ${request.author.firstName}", "Автор", _authorCntrl),
                 _textField("${request.responsible.surName} ${request.responsible.firstName}", "Ответственный", _responsibleCntrl),
-                _textField("${request.equipment.map((value) => '${value.type} ${value.name}').toString()}", "Оборудование", _equipmentCntrl),
-                _textField(request.description, "Описание", _equipmentCntrl)
+                _textField("${request.equipment.map((value) => '${value.name}').toString()}", "Оборудование", _equipmentCntrl),
+                _textField(request.description, "Описание", _descriptionCntrl)
               ],
             )
         ));
