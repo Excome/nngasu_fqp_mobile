@@ -54,17 +54,17 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    List<Map<String, dynamic>> roles = [];
-    // for (var role in this.roles) {
-    //   roles.add(role.toJson());
-    // }
+    List<String> roles = [];
+    for (var role in this.roles) {
+      roles.add(role.name);
+    }
     return <String, dynamic> {
       'id': id,
       'userName': userName,
       'pass': pass,
       'passConfirm': passConfirm,
       'email': email,
-      // "roles": roles,
+      "role": jsonEncode(roles),
       'firstName': firstName,
       'surName': surName,
       'createdDate': createdDate.toString()

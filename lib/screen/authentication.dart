@@ -191,7 +191,6 @@ class _AuthPageState extends State<AuthPage> {
         Application.db.collection("auth").doc(Application.dbAuthId).set(authStore);
         Application.token = token;
         Application.crrUsername = _username;
-        Application.crrUsername = _usernameController.text;
         setState(() { });
       } else {
         // _passwordController.clear();

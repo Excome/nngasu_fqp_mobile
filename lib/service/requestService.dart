@@ -24,6 +24,22 @@ class RequestService {
     }
   }
 
+  static Future<List<Request>> fetchUserRequests(int page, String? userName, String token) async {
+    try {
+      var url = '/requests?author=$userName&page=$page';
+      var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
+      var responseBody = await HttpClient.get(url, headers: headersMap);
+      List<Request> requests = [];
+      for (var request in responseBody){
+        requests.add(Request.fromJson(request));
+      }
+      return requests;
+    } catch (e) {
+      Application.logger.w("Failed to fetch requests at page '$page': $e");
+      return [];
+    }
+  }
+
   static Future<Request> fetchRequest(int id, String token) async {
     try {
       var url = '/requests/$id';

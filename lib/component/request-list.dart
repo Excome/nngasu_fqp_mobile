@@ -6,8 +6,8 @@ import 'package:nngasu_fqp_mobile/screen/requestDetail.dart';
 import 'package:nngasu_fqp_mobile/service/requestService.dart';
 
 class RequestList extends StatefulWidget {
-  const RequestList({Key? key}) : super(key: key);
-
+  const RequestList({Key? key, this.userName }) : super(key: key);
+  final String? userName;
   @override
   State<RequestList> createState() => _RequestListState();
 }
@@ -26,7 +26,13 @@ class _RequestListState extends State<RequestList> {
   }
 
   void fetchRequests(int page) async {
-    var requestList = await RequestService.fetchRequests(page, Application.token);
+    var requestList = <Request> [];
+    if (widget.userName == null) {
+      requestList = await RequestService.fetchRequests(page, Application.token);
+    }
+    else {
+      requestList = await RequestService.fetchUserRequests(page, widget.userName, Application.token);
+    }
     if (requestList.isNotEmpty) {
       _page += 1;
       setState(() => _requests.addAll(requestList));

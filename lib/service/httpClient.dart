@@ -47,7 +47,7 @@ class HttpClient {
     var uri = Uri.parse('${Application.serverUrl}$url');
     var requestHeaders = {HttpHeaders.contentTypeHeader: 'application/json'};
     requestHeaders.addAll(headers!);
-    final response = await http.put(uri, headers: requestHeaders, body: requestBody);
+    final response = await http.put(uri, headers: requestHeaders, body: jsonEncode(requestBody));
     var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
       return responseBody;
