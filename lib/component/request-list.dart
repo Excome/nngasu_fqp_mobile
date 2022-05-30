@@ -52,7 +52,7 @@ class _RequestListState extends State<RequestList> {
                 elevation: 2.0,
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Container(
-                  decoration: const BoxDecoration(color: Colors.white30),
+                  decoration: BoxDecoration(color: !_requests[index].status ? Color.fromRGBO(235, 235, 235, 0.7) : Colors.white30),
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                     leading: Container(

@@ -19,9 +19,11 @@ class _UserProfileState extends State<UserProfile> {
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _firstNameCtrl = TextEditingController();
   final TextEditingController _surNameCtrl = TextEditingController();
+  final TextEditingController _createdDateCtrl = TextEditingController();
   bool isEditMode = false;
   bool isError = false;
   User crrUser = User("", "");
+
 
   @override
   void initState() {
@@ -233,6 +235,11 @@ class _UserProfileState extends State<UserProfile> {
           child: _textBox(crrUser.surName, "Фамилия",
               const Icon(Icons.arrow_drop_up_sharp), _surNameCtrl, isEditMode),
         ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 20),
+          child: _textBox(crrUser.createdDate.toString(), "Дата регистрации",
+              const Icon(Icons.date_range), _createdDateCtrl, false),
+        ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -317,6 +324,7 @@ class _UserProfileState extends State<UserProfile> {
       Application.db.collection("crrUser").doc(Application.dbCrrUserId).set({});
       Application.token = '';
       Application.crrUsername = "";
+      Application.isAdmin = false;
 
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => AuthPage()));

@@ -6,9 +6,10 @@ import 'package:nngasu_fqp_mobile/service/httpClient.dart';
 import '../main.dart';
 
 class EquipmentService {
-  static Future<List<Equipment>> fetchEquipments(int page, String token) async {
+  static Future<List<Equipment>> fetchEquipments(int page, String token, {int? size}) async {
     try {
-      var url = '/equipments?page=$page';
+      size ??= 10;
+      var url = '/equipments?page=$page&size=$size';
       var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
       var responseBody = await HttpClient.get(url, headers: headersMap);
       List<Equipment> equipments = [];

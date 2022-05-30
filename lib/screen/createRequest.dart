@@ -1,3 +1,4 @@
+import 'package:d_input/d_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nngasu_fqp_mobile/domain/equipment.dart';
@@ -30,7 +31,7 @@ class _CreateRequestState extends State<CreateRequest> {
 
   void fetchEquipments(int page) async {
     var equipments =
-        await EquipmentService.fetchEquipments(page, Application.token);
+        await EquipmentService.fetchEquipments(page, Application.token, size: 100);
     setState(() => _equipments.addAll(equipments));
   }
 
@@ -44,6 +45,7 @@ class _CreateRequestState extends State<CreateRequest> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: DropDownMultiSelect(
+        isDense: true,
         onChanged: (List<String> x) {
           setState(() {
             _selectedEquipments = x;
@@ -56,33 +58,22 @@ class _CreateRequestState extends State<CreateRequest> {
     );
   }
 
-  Widget _input(String placeholder, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          hintText: placeholder,
-        ),
-      ),
-    );
-  }
-
   Widget _button(String text, void Function() func) {
-    return RaisedButton(
-      splashColor: Theme.of(context).primaryColor,
-      highlightColor: Theme.of(context).primaryColor,
-      color: const Color.fromRGBO(239, 103, 0, 1),
-      child: Text(text,
-          style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColor)),
-      onPressed: () {
-        func();
-      },
-    );
+    return Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: RaisedButton(
+          splashColor: Theme.of(context).primaryColor,
+          highlightColor: Theme.of(context).primaryColor,
+          color: const Color.fromRGBO(239, 103, 0, 1),
+          child: Text(text,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor)),
+          onPressed: () {
+            func();
+          },
+        ));
   }
 
   void _createRequest() async {
@@ -92,14 +83,16 @@ class _CreateRequestState extends State<CreateRequest> {
     var equipment = _selectedEquipments.map((equipment) =>Equipment(equipment.replaceAll(RegExp(r'.*: '), ""), 0, "", "")).toList();
     var request = Request(author, audience, equipment, description: description);
     var response = await RequestService.createRequest(request, Application.token);
-    // _selectedEquipments.clear();
+    if (response.audience.isNotEmpty) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Application.nngasuOrangeColor,
             statusBarIconBrightness: Brightness.light,
             statusBarBrightness: Brightness.light
@@ -109,10 +102,25 @@ class _CreateRequestState extends State<CreateRequest> {
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            _input('Номер аудитории', _audienceCntrl),
+            Padding(
+                padding: const EdgeInsets.only(left: 8, right: 8, top: 50),
+                child: DInput(
+                  isRequired: true,
+                  controller: _audienceCntrl,
+                  hint: "Номер аудитории",
+                  validator: (value) => !value!.contains('-') ? "Введите аудиторию в формате 2-102" : null,
+                  inputType: const TextInputType.numberWithOptions(signed: true),
+                )),
             _dropDownList(),
-            _input('Описание', _descriptionCntrl),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: DInput(
+                  controller: _descriptionCntrl,
+                  hint: "Описание",
+                  inputType: TextInputType.text,
+                )),
             _button("Создать заявку", _createRequest)
           ],
         ),

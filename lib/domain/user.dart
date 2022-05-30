@@ -75,4 +75,25 @@ class User {
   String toString() {
     return 'User{id: $id, userName: $userName, email: $email, firstName: $firstName, surName: $surName, createdDate: $createdDate, pass: $pass, passConfirm: $passConfirm}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      other is User &&
+          id == other.id &&
+          userName == other.userName &&
+          email == other.email &&
+          firstName == other.firstName &&
+          surName == other.surName;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      userName.hashCode ^
+      email.hashCode ^
+      firstName.hashCode ^
+      surName.hashCode ^
+      roles.hashCode ^
+      createdDate.hashCode ^
+      pass.hashCode ^
+      passConfirm.hashCode;
 }

@@ -26,6 +26,7 @@ class Application extends StatelessWidget{
 
   static String crrUsername = "";
   static String token = "";
+  static bool isAdmin = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

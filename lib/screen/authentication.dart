@@ -24,6 +24,11 @@ class _AuthPageState extends State<AuthPage> {
   bool _showLogin = true;
 
   @override
+  void initState() {
+    _checkAuth();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget _logo() {
       return const Padding(
@@ -260,17 +265,12 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   void _checkAuth() async {
-    var authMap = await Application.db.collection('auth').doc(
-        Application.dbAuthId).get();
-    if (authMap != null) {
+    var authMap = await Application.db.collection('auth').doc(Application.dbAuthId).get();
+    if (authMap != null && authMap['token'] != "" && authMap['userName'] != "") {
       setState(() {
-        Application.token = authMap['token'] ?? "";
+        Application.token = authMap['token'];
+        Application.crrUsername = authMap['userName'];
       });
     }
-  }
-
-  @override
-  void initState() {
-    _checkAuth();
   }
 }

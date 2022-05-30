@@ -8,6 +8,8 @@ import 'package:nngasu_fqp_mobile/screen/authentication.dart';
 import 'package:nngasu_fqp_mobile/screen/createRequest.dart';
 import 'package:nngasu_fqp_mobile/screen/userProfile.dart';
 
+import '../component/equipment-list.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -18,8 +20,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     RequestList(),
-    Scaffold(),
-    UserProfile()
+    EquipmentList(),
+    UserProfile(),
+    Scaffold()
   ];
   int sectionIndex = 0;
 
@@ -65,6 +68,10 @@ class _HomePageState extends State<HomePage> {
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Профиль',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.admin_panel_settings_outlined),
+          label: 'Админ. панель',
         )
       ],
       currentIndex: sectionIndex,

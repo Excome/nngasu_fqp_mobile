@@ -21,7 +21,7 @@ class Request {
 
   factory Request.fromJson(Map<String, dynamic> json) {
     var author = User.fromJson(json['author']);
-    var responsible = json['responsible'];
+    var responsible = json['responsible'] != null ? User.fromJson(json['responsible'] ) : null;
     var equipmentsJson = json['equipment'];
     List<Equipment> equipments = [];
     if (equipmentsJson != null) {
