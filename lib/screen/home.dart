@@ -2,16 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nngasu_fqp_mobile/component/request-list.dart';
-import 'package:nngasu_fqp_mobile/domain/user.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
-import 'package:nngasu_fqp_mobile/screen/authentication.dart';
 import 'package:nngasu_fqp_mobile/screen/createRequest.dart';
 import 'package:nngasu_fqp_mobile/screen/userProfile.dart';
 
 import '../component/equipment-list.dart';
+import 'createEquipment.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key, this.pageIndex}) : super(key: key);
+  int? pageIndex;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -21,10 +21,18 @@ class _HomePageState extends State<HomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     RequestList(),
     EquipmentList(),
-    UserProfile(),
-    Scaffold()
+    Scaffold(),
+    UserProfile()
   ];
   int sectionIndex = 0;
+
+
+  @override
+  void initState() {
+    if (widget.pageIndex != null) {
+      sectionIndex = widget.pageIndex!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,20 +45,32 @@ class _HomePageState extends State<HomePage> {
               statusBarBrightness: Brightness.light
           ),
           title: const Text('ННГАСУ | ТРО'),
-          leading: const Icon(Icons.home_rounded),
+          // leading: const Icon(Icons.home_rounded),
           backgroundColor: Application.nngasuOrangeColor),
       body: _widgetOptions.elementAt(sectionIndex),
-      floatingActionButton: Visibility(
-          visible: sectionIndex == 0,
-          child: FloatingActionButton(
-            onPressed: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateRequest()))},
-            tooltip: "Создать заявку",
-            child: const Icon(Icons.add),
-            elevation: 4.0,
-            backgroundColor: Application.nngasuOrangeColor,
-          )
-      ),
+      floatingActionButton: _floatingActionButton(context),
       bottomNavigationBar: navigationBar(sectionIndex),
+    );
+  }
+
+  Visibility _floatingActionButton(BuildContext context) {
+    return Visibility(
+        visible: sectionIndex == 0 || sectionIndex == 1,
+        child: FloatingActionButton(
+          onPressed: () => {
+            if (sectionIndex == 0) {
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const CreateRequest()))
+            } else if (sectionIndex == 1) {
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const CreateEquipment()))
+            }
+          },
+          tooltip: sectionIndex == 0 ? "Создать заявку" : "Создать оборудование",
+          child: const Icon(Icons.add),
+          elevation: 4.0,
+          backgroundColor: Application.nngasuOrangeColor,
+        )
     );
   }
 
@@ -58,7 +78,7 @@ class _HomePageState extends State<HomePage> {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.list),
+          icon: Icon(Icons.message),
           label: 'Заявки',
         ),
         BottomNavigationBarItem(
@@ -66,13 +86,13 @@ class _HomePageState extends State<HomePage> {
           label: 'Оборудование',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Профиль',
+          icon: Icon(Icons.supervised_user_circle_sharp),
+          label: 'Пользователи',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.admin_panel_settings_outlined),
-          label: 'Админ. панель',
-        )
+          icon: Icon(Icons.more_horiz),
+          label: 'Профиль',
+        ),
       ],
       currentIndex: sectionIndex,
       backgroundColor: Colors.white,

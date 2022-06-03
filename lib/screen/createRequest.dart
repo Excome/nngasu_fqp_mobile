@@ -9,6 +9,7 @@ import 'package:nngasu_fqp_mobile/service/requestService.dart';
 
 import '../domain/user.dart';
 import '../main.dart';
+import 'home.dart';
 
 class CreateRequest extends StatefulWidget {
   const CreateRequest({Key? key}) : super(key: key);
@@ -84,7 +85,12 @@ class _CreateRequestState extends State<CreateRequest> {
     var request = Request(author, audience, equipment, description: description);
     var response = await RequestService.createRequest(request, Application.token);
     if (response.audience.isNotEmpty) {
-      Navigator.of(context).pop();
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomePage(
+                pageIndex: 0,
+              )));
     }
   }
 

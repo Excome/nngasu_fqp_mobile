@@ -31,12 +31,13 @@ class Application extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'NNGASU',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primaryColor: Colors.white,
           textTheme: const TextTheme(titleLarge: TextStyle(color: Colors.black))
       ),
       // home: AuthPage(),
-      home: token.isEmpty ? AuthPage() : const HomePage(),
+      home: token.isEmpty ? AuthPage() : HomePage(),
       // home: const HomePage(),
     );
   }

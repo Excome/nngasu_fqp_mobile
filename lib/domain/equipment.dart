@@ -22,4 +22,18 @@ class Equipment {
       'description': description
     };
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Equipment &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          count == other.count &&
+          type == other.type &&
+          description == other.description;
+
+  @override
+  int get hashCode =>
+      name.hashCode ^ count.hashCode ^ type.hashCode ^ description.hashCode;
 }
