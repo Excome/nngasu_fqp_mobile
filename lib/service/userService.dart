@@ -18,6 +18,23 @@ class UserService {
     }
   }
 
+  static Future<List<User>> fetchUsers(int page, String token) async {
+    try {
+      var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
+      var responseBody = await HttpClient.get("/users?&page=$page", headers: headersMap);
+
+      List<User> userList = [];
+      for (var userJson in responseBody) {
+        userList.add(User.fromJson(userJson));
+      }
+
+      return userList;
+    } catch (e) {
+      Application.logger.e("Failed to fetch users at '$page' page: $e");
+      return <User>[];
+    }
+  }
+
   static Future<User> editUserProfile(User user, String token) async {
     try {
       var userName = user.userName;

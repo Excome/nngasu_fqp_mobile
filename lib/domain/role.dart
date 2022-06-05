@@ -41,4 +41,21 @@ extension RoleExt on Role {
         return 1000;
     }
   }
+
+  String get translation {
+    switch (this) {
+      case Role.ROLE_GUEST:
+        return "Гость";
+      case Role.ROLE_USER:
+        return "Пользователь";
+      case Role.ROLE_TEACHER:
+        return "Преподаватель";
+      case Role.ROLE_TECHNICIAN:
+        return "Техник";
+      case Role.ROLE_MODERATOR:
+        return "Модерадор";
+      case Role.ROLE_ADMIN:
+        return "Администратор";
+    }
+  }
 }

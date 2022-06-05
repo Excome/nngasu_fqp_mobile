@@ -60,14 +60,16 @@ class _EquipmentListState extends State<EquipmentList> {
                       Text(_equipments[index].description),
                     ],
                   ),
-                  trailing: IconButton(
-                    alignment: Alignment.centerRight,
-                    icon: const Icon(Icons.edit, color: Application.nngasuBlueColor),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => EditEquipment(equipment: _equipments[index],)));
-                    },
+                  trailing: Visibility(
+                    visible: Application.isAdmin,
+                    child: IconButton(
+                      alignment: Alignment.centerRight,
+                      icon: const Icon(Icons.edit, color: Application.nngasuBlueColor),
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditEquipment(equipment: _equipments[index],)));
+                      },
                   ),
-                ),
+                )),
               );
             }
         )

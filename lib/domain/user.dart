@@ -38,7 +38,7 @@ class User {
     }
     var createdDate = json['createdDate'];
     if (createdDate != null) {
-      createdDate = DateFormat("dd-MM-yyy HH:mm").parse(createdDate);
+      createdDate = DateFormat("dd-MM-yyyy HH:mm").parse(createdDate);
     } else {
       createdDate = DateTime.now();
     }
@@ -64,10 +64,10 @@ class User {
       'pass': pass,
       'passConfirm': passConfirm,
       'email': email,
-      "role": jsonEncode(roles),
+      "roles": roles,
       'firstName': firstName,
       'surName': surName,
-      'createdDate': createdDate.toString()
+      'createdDate': DateFormat("dd-MM-yyy HH:mm").format(createdDate)
     };
   }
 

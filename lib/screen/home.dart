@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nngasu_fqp_mobile/component/request-list.dart';
+import 'package:nngasu_fqp_mobile/component/user-list.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
 import 'package:nngasu_fqp_mobile/screen/createRequest.dart';
 import 'package:nngasu_fqp_mobile/screen/userProfile.dart';
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     RequestList(),
     EquipmentList(),
-    Scaffold(),
+    UserList(),
     UserProfile()
   ];
   int sectionIndex = 0;

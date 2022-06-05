@@ -70,11 +70,11 @@ class _RequestListState extends State<RequestList> {
                                 color: Application.nngasuOrangeColor)),
                       ),
                     ),
-                    title: Text("Ауд.: ${_requests[index].audience}",
+                    title: Text(_requests[index].audience,
                         style: const TextStyle(
                             fontSize: 18, color: Application.nngasuBlueColor)),
                     subtitle: Text(
-                        "Автор: ${_requests[index].author.surName} ${_requests[index].author.firstName}",
+                        "${_requests[index].author.surName} ${_requests[index].author.firstName}",
                         style:
                             const TextStyle(fontSize: 16, color: Colors.black)),
                     trailing: Container(
@@ -86,7 +86,7 @@ class _RequestListState extends State<RequestList> {
                       ),
                     ),
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => RequestDetail(request: _requests[index],)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => RequestDetail(request: _requests[index])));
                     },
                   ),
                 ),

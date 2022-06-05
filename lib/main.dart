@@ -37,7 +37,7 @@ class Application extends StatelessWidget{
           textTheme: const TextTheme(titleLarge: TextStyle(color: Colors.black))
       ),
       // home: AuthPage(),
-      home: token.isEmpty ? AuthPage() : HomePage(),
+      home: token.isNotEmpty && crrUsername.isNotEmpty ? HomePage() : AuthPage(),
       // home: const HomePage(),
     );
   }

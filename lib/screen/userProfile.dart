@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nngasu_fqp_mobile/component/request-list.dart';
 import 'package:nngasu_fqp_mobile/screen/authentication.dart';
+import 'package:nngasu_fqp_mobile/screen/home.dart';
 import 'package:nngasu_fqp_mobile/service/userService.dart';
 
+import '../domain/role.dart';
 import '../domain/user.dart';
 import '../main.dart';
 
@@ -16,6 +19,7 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   final TextEditingController _usernameCtrl = TextEditingController();
+  final TextEditingController _roleCtrl = TextEditingController();
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _firstNameCtrl = TextEditingController();
   final TextEditingController _surNameCtrl = TextEditingController();
@@ -213,6 +217,11 @@ class _UserProfileState extends State<UserProfile> {
               const Icon(Icons.person), _usernameCtrl, false),
         ),
         Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: _textBox(_getHighPriorityRole(crrUser.roles), "Права доступа",
+              const Icon(Icons.admin_panel_settings_sharp), _roleCtrl, false),
+        ),
+        Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 20),
           child: _textBox(crrUser.email, "Email", const Icon(Icons.email),
               _emailCtrl, isEditMode),
@@ -237,7 +246,7 @@ class _UserProfileState extends State<UserProfile> {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 20),
-          child: _textBox(crrUser.createdDate.toString(), "Дата регистрации",
+          child: _textBox(DateFormat("dd-MM-yyy HH:mm").format(crrUser.createdDate), "Дата регистрации",
               const Icon(Icons.date_range), _createdDateCtrl, false),
         ),
         Row(
@@ -279,11 +288,10 @@ class _UserProfileState extends State<UserProfile> {
       var user = await UserService.fetchUser(
           Application.crrUsername, Application.token);
       crrUser = user;
-      crrUserMap = user.toJson();
       Application.db
           .collection("crrUser")
           .doc(Application.dbCrrUserId)
-          .set(crrUserMap);
+          .set(user.toJson());
     }
     setState(() {});
   }
@@ -326,8 +334,17 @@ class _UserProfileState extends State<UserProfile> {
       Application.crrUsername = "";
       Application.isAdmin = false;
 
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => AuthPage()));
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AuthPage()), (route) => false);
     }
+  }
+  
+  String _getHighPriorityRole(List<Role> roles) {
+    var maxRole = Role.ROLE_GUEST;
+    for (var role in roles) {
+      if (role.priority > maxRole.priority){
+        maxRole = role;
+      }
+    }
+    return maxRole.translation;
   }
 }
