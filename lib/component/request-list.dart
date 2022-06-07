@@ -5,9 +5,12 @@ import 'package:nngasu_fqp_mobile/main.dart';
 import 'package:nngasu_fqp_mobile/screen/requestDetail.dart';
 import 'package:nngasu_fqp_mobile/service/requestService.dart';
 
+import '../domain/role.dart';
+
 class RequestList extends StatefulWidget {
-  const RequestList({Key? key, this.userName }) : super(key: key);
-  final String? userName;
+  const RequestList({Key? key, this.author, this.responsible }) : super(key: key);
+  final String? author;
+  final String? responsible;
   @override
   State<RequestList> createState() => _RequestListState();
 }
@@ -27,11 +30,14 @@ class _RequestListState extends State<RequestList> {
 
   void fetchRequests(int page) async {
     var requestList = <Request> [];
-    if (widget.userName == null) {
-      requestList = await RequestService.fetchRequests(page, Application.token);
+    if (widget.author != null && widget.responsible == null) {
+      requestList = await RequestService.fetchUserAuthorRequests(page, widget.author, Application.token);
+    }
+    else if (widget.responsible != null && widget.author == null) {
+      requestList = await RequestService.fetchUserResponsibleRequests(page, widget.responsible, Application.token);
     }
     else {
-      requestList = await RequestService.fetchUserRequests(page, widget.userName, Application.token);
+      requestList = await RequestService.fetchRequests(page, Application.token);
     }
     if (requestList.isNotEmpty) {
       _page += 1;
@@ -86,7 +92,11 @@ class _RequestListState extends State<RequestList> {
                       ),
                     ),
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => RequestDetail(request: _requests[index])));
+                      if (Application.crrUser.hasPriorityMoreThen(Role.ROLE_USER)) {
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) =>
+                                RequestDetail(request: _requests[index])));
+                      }
                     },
                   ),
                 ),

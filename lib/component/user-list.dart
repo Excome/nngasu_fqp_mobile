@@ -53,18 +53,20 @@ class _UserListState extends State<UserList> {
                             color: Application.nngasuOrangeColor)),
                   ),
                 ),
-                // title: Text(_users[index].userName, style: const TextStyle(color: Colors.black, fontSize: 20),),
-                title: Text(_getHighPriorityRole(_users[index].roles), style: TextStyle(color: _getHighPriorityRole(_users[index].roles) == 'Администратор' ? Colors.red : Colors.grey, fontSize: 14)),
+                title: Text(_getHighPriorityRole(_users[index].roles), style: TextStyle(color: roleColors(_getHighPriorityRole(_users[index].roles)), fontSize: 14)),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget> [
                     Text(_users[index].userName, style: const TextStyle(color: Colors.black, fontSize: 20)),
                     Text("${_users[index].surName} ${_users[index].firstName}", style: const TextStyle(color: Application.nngasuBlueColor, fontSize: 14)),
-                    // Text(_getHighPriorityRole(_users[index].roles), style: TextStyle(color: _getHighPriorityRole(_users[index].roles) == 'Администратор' ? Colors.red : Colors.grey, fontSize: 14)),
                   ],
                 ),
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetail(user: _users[index])));
+                    if (Application.crrUser.hasPriorityMoreThen(Role.ROLE_MODERATOR)) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              UserDetail(user: _users[index])));
+                    }
                   },
                 ),
             );
@@ -100,6 +102,21 @@ class _UserListState extends State<UserList> {
   void pagination() {
     if (_scrollController.position.extentAfter <= 0 && _isLoading) {
       fetchUsers(_page);
+    }
+  }
+  
+  Color roleColors(String role) {
+    switch (role) {
+      case "Преподаватель":
+        return Application.nngasuBlueColor;
+      case "Техник":
+        return Colors.green;
+      case "Модератор":
+        return Colors.purple;
+      case "Администратор":
+        return Colors.red;
+      default:
+        return Colors.grey;
     }
   }
 }

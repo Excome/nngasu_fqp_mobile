@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nngasu_fqp_mobile/component/request-list.dart';
 import 'package:nngasu_fqp_mobile/component/user-list.dart';
+import 'package:nngasu_fqp_mobile/domain/role.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
 import 'package:nngasu_fqp_mobile/screen/createRequest.dart';
 import 'package:nngasu_fqp_mobile/screen/userProfile.dart';
@@ -43,11 +44,23 @@ class _HomePageState extends State<HomePage> {
           systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: Application.nngasuOrangeColor,
               statusBarIconBrightness: Brightness.light,
-              statusBarBrightness: Brightness.light
+              statusBarBrightness: Brightness.light,
           ),
           title: const Text('ННГАСУ | ТРО'),
           // leading: const Icon(Icons.home_rounded),
-          backgroundColor: Application.nngasuOrangeColor),
+          backgroundColor: Application.nngasuOrangeColor,
+          actions: [
+            Visibility(
+                visible: sectionIndex == 3,
+                child: IconButton(
+                  padding: const EdgeInsets.only(right: 10),
+                  onPressed: () => {},
+                  icon: const Icon(Icons.settings, color: Colors.white),
+                  tooltip: "Настройки",
+                )
+            )
+          ],
+      ),
       body: _widgetOptions.elementAt(sectionIndex),
       floatingActionButton: _floatingActionButton(context),
       bottomNavigationBar: navigationBar(sectionIndex),
@@ -56,7 +69,7 @@ class _HomePageState extends State<HomePage> {
 
   Visibility _floatingActionButton(BuildContext context) {
     return Visibility(
-        visible: sectionIndex == 0 || sectionIndex == 1,
+        visible: (sectionIndex == 0 && Application.crrUser.hasPriorityMoreThen(Role.ROLE_TEACHER)) || (sectionIndex == 1 && Application.crrUser.hasPriorityMoreThen(Role.ROLE_MODERATOR)),
         child: FloatingActionButton(
           onPressed: () => {
             if (sectionIndex == 0) {

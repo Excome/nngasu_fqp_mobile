@@ -53,7 +53,7 @@ extension RoleExt on Role {
       case Role.ROLE_TECHNICIAN:
         return "Техник";
       case Role.ROLE_MODERATOR:
-        return "Модерадор";
+        return "Модератор";
       case Role.ROLE_ADMIN:
         return "Администратор";
     }

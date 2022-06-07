@@ -107,17 +107,11 @@ class _CreateEquipmentState extends State<CreateEquipment> {
     var description = _decriptionCntrl.text.trim();
     var equipment = Equipment(name, count, type, description);
 
-    var response =
-        await EquipmentService.createEquipment(equipment, Application.token);
+    var response = await EquipmentService.createEquipment(equipment, Application.token);
     if (response.id == 0 && response.name == "") {
       setState(() => _errorFlag = true);
     } else {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomePage(
-                    pageIndex: 1,
-                  )));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage(pageIndex: 1,)), (route) => false);
     }
   }
 }

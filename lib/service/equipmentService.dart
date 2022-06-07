@@ -36,15 +36,15 @@ class EquipmentService {
     }
   }
 
-  static Future<Equipment> editEquipment(Equipment equipment, String token) async {
+  static Future<Equipment> editEquipment(String name, Equipment equipment, String token) async {
     try {
-      var url = '/equipments/${equipment.name}';
+      var url = '/equipments/$name';
       var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
       var requestBody = equipment.toJson();
       var responseBody = await HttpClient.put(url, requestBody, headers: headersMap);
       return Equipment.fromJson(responseBody);
     } catch (e) {
-      Application.logger.w("Failed to edit equipment with '${equipment.name}' name: $e");
+      Application.logger.w("Failed to edit equipment with '$name' name: $e");
       return Equipment("", 0, "", "");
     }
   }

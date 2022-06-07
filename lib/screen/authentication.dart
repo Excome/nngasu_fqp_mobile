@@ -215,6 +215,7 @@ class _AuthPageState extends State<AuthPage> {
         Application.token = token;
         Application.crrUsername = _username;
         var crrUser = await UserService.fetchUser(Application.crrUsername, Application.token);
+        Application.crrUser = crrUser;
         Application.db.collection("crrUser").doc(Application.dbCrrUserId).set(crrUser.toJson());
         crrUser.roles.contains(Role.ROLE_ADMIN) ? Application.isAdmin = true : Application.isAdmin = false;
         setState(() {});
@@ -317,14 +318,16 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   void _checkAuth() async {
-    var authMap =
-        await Application.db.collection('auth').doc(Application.dbAuthId).get();
+    var authMap = await Application.db.collection('auth').doc(Application.dbAuthId).get();
+    var crrUserMap = await Application.db.collection('crrUser').doc(Application.dbCrrUserId).get();
     if (authMap != null &&
         authMap['token'] != "" &&
-        authMap['userName'] != "") {
+        authMap['userName'] != "" &&
+        (crrUserMap != null || crrUserMap != {})) {
       setState(() {
         Application.token = authMap['token'];
         Application.crrUsername = authMap['userName'];
+        Application.crrUser = User.fromJson(crrUserMap!);
       });
     }
   }

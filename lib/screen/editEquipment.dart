@@ -133,17 +133,16 @@ class _EditEquipmentState extends State<EditEquipment> {
     if (_equipment == newEquipment) {
       return;
     }
-    var response = await EquipmentService.editEquipment(newEquipment, Application.token);
+    var response = await EquipmentService.editEquipment(_equipment.name, newEquipment, Application.token);
     if (response.name != "") {
-      Navigator.of(context).pop();
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage(pageIndex: 1,)), (route) => false);
     }
   }
 
   void deleteEquipment() async {
     var result = await EquipmentService.deleteEquipment(_equipment, Application.token);
     if (result) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage(pageIndex: 1,)));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage(pageIndex: 1,)), (route) => false);
     }
   }
 }

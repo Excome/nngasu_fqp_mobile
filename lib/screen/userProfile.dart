@@ -69,10 +69,10 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget _menuButton(String text, void Function() func, Color textColor) {
+  Widget _menuButton(String text, void Function() func, Color textColor, double width) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            fixedSize: const Size(180, 50),
+            fixedSize: Size(width, 50),
             elevation: 0,
             primary: Colors.white),
         onPressed: func,
@@ -112,7 +112,7 @@ class _UserProfileState extends State<UserProfile> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       elevation: 16,
-      child: RequestList(userName: crrUser.userName));
+      child: RequestList(author: crrUser.userName));
   }
 
   Dialog _exitDialog(BuildContext context) {
@@ -188,27 +188,6 @@ class _UserProfileState extends State<UserProfile> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Visibility(
-                    visible: !isEditMode,
-                    child: _menuButton(
-                        "Мои заявки", () { showDialog(
-                        context: context,
-                        builder: (context) {
-                          return _myRequestsDialog(context);
-                        }); }, Application.nngasuOrangeColor))),
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Visibility(
-                    visible: !isEditMode,
-                    child: _menuButton("Изменить профиль", () {
-                      setState(() {
-                        isEditMode = true;
-                      });
-                    }, Application.nngasuOrangeColor))),
           ],
         ),
         Padding(
@@ -232,12 +211,8 @@ class _UserProfileState extends State<UserProfile> {
                 "Данный адресс электронной почты уже зарегистрирован!")),
         Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: _textBox(
-              crrUser.firstName,
-              "Имя",
-              const Icon(Icons.arrow_drop_up_sharp),
-              _firstNameCtrl,
-              isEditMode),
+          child: _textBox(crrUser.firstName, "Имя",
+              const Icon(Icons.arrow_drop_up_sharp), _firstNameCtrl, isEditMode),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 20),
@@ -250,26 +225,39 @@ class _UserProfileState extends State<UserProfile> {
               const Icon(Icons.date_range), _createdDateCtrl, false),
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 5),
+                child: Visibility(visible: !isEditMode, child: _menuButton("Созданные заявки", () { showDialog(context: context, builder: (context) {return _myRequestsDialog(context);}); }, Application.nngasuOrangeColor, 180))),
+            Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 5),
+                child: Visibility(visible: !isEditMode, child: _menuButton("Рабочие заявки", () {  }, Application.nngasuOrangeColor, 180))),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Visibility(visible: !isEditMode, child: _menuButton("Изменить профиль", () {setState(() {isEditMode = true;});}, Application.nngasuOrangeColor, 180))),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Visibility(visible: !isEditMode, child: _menuButton("Изменить пароль", () {}, Application.nngasuOrangeColor, 180))),
+          ],
+        ),
+             Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Visibility(
-                    visible: isEditMode,
-                    child: _menuButton("Отмена", () {
-                      setState(() {
-                        isEditMode = false;
-                        isError = false;
-                      });
-                    }, Colors.red))),
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                child: Visibility(visible: isEditMode, child: _menuButton("Отмена", () {setState(() {isEditMode = false;isError = false;});}, Colors.red, 180))),
             Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Visibility(
-                    visible: isEditMode,
-                    child: _menuButton("Изменить", _editUserProfile,
-                        Application.nngasuBlueColor))),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                child: Visibility(visible: isEditMode, child: _menuButton("Изменить", _editUserProfile, Application.nngasuBlueColor, 180))),
           ],
         ),
         _logoutButton("Выйти")

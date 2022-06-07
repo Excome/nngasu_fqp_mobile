@@ -71,6 +71,15 @@ class User {
     };
   }
 
+  bool hasPriorityMoreThen(Role role) {
+    for (var userRole in roles){
+      if (userRole.priority >= role.priority){
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   String toString() {
     return 'User{id: $id, userName: $userName, email: $email, firstName: $firstName, surName: $surName, createdDate: $createdDate, pass: $pass, passConfirm: $passConfirm}';

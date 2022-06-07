@@ -85,12 +85,7 @@ class _CreateRequestState extends State<CreateRequest> {
     var request = Request(author, audience, equipment, description: description);
     var response = await RequestService.createRequest(request, Application.token);
     if (response.audience.isNotEmpty) {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomePage(
-                pageIndex: 0,
-              )));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage(pageIndex: 0,)), (route) => false);
     }
   }
 

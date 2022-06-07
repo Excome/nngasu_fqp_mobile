@@ -2,6 +2,7 @@ import 'package:d_input/d_input.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:nngasu_fqp_mobile/domain/request.dart';
+import 'package:nngasu_fqp_mobile/domain/role.dart';
 import 'package:nngasu_fqp_mobile/screen/home.dart';
 import 'package:nngasu_fqp_mobile/service/requestService.dart';
 import 'package:nngasu_fqp_mobile/service/userService.dart';
@@ -163,9 +164,13 @@ class _RequestDetailState extends State<RequestDetail> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                      child: Visibility(visible: !request.status, child: _menuButton("Закрыть заявку", completeRequest, Colors.green))),
+                      child: Visibility(
+                          visible: !request.status && (request.responsible.userName == Application.crrUsername || Application.crrUser.hasPriorityMoreThen(Role.ROLE_MODERATOR)),
+                          child: _menuButton("Закрыть заявку", completeRequest, Colors.green))),
                   Padding(padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                      child: Visibility(visible: !isEditMode, child: _menuButton("Изменить заявку", () { setState(() { isEditMode = true; }); }, Application.nngasuBlueColor))),
+                      child: Visibility(
+                          visible: !isEditMode && (request.author.userName == Application.crrUsername || Application.crrUser.hasPriorityMoreThen(Role.ROLE_TECHNICIAN)), 
+                          child: _menuButton("Изменить заявку", () { setState(() { isEditMode = true; }); }, Application.nngasuBlueColor))),
                 ],
               ),
             ],
@@ -200,7 +205,10 @@ class _RequestDetailState extends State<RequestDetail> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: _responsibleDropdownList(),
+          child: Visibility(
+            visible: Application.crrUser.hasPriorityMoreThen(Role.ROLE_MODERATOR),
+            child: _responsibleDropdownList(),
+          )
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

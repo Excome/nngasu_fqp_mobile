@@ -5,6 +5,7 @@ import 'package:nngasu_fqp_mobile/screen/authentication.dart';
 import 'package:localstore/localstore.dart';
 import 'package:nngasu_fqp_mobile/screen/home.dart';
 
+import 'domain/role.dart';
 import 'domain/user.dart';
 
 void main() {
@@ -26,6 +27,7 @@ class Application extends StatelessWidget{
 
   static String crrUsername = "";
   static String token = "";
+  static User crrUser = User("", "");
   static bool isAdmin = false;
   @override
   Widget build(BuildContext context) {

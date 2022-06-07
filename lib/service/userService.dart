@@ -63,4 +63,31 @@ class UserService {
       return [];
     }
   }
+
+  static Future<User> editUserByAdmin(User user, String token) async {
+    try {
+      var userName = user.userName;
+      var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
+      var requestBody = user.toJson();
+      var response = await HttpClient.put("/admin/users/$userName", requestBody, headers: headersMap);
+
+      return User.fromJson(response);
+    } catch (e) {
+      Application.logger.e("Failed to edit user '${user.userName}' by admin '${Application.crrUsername}': $e");
+      return User("", "");
+    }
+  }
+
+  static Future<bool> deleteUserByAdmin(String userName, String token) async {
+    try {
+      var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
+      var requestBody = <String, dynamic> {};
+      var response = await HttpClient.delete("/admin/users/$userName",requestBody, headers: headersMap);
+
+      return true;
+    } catch (e) {
+      Application.logger.e("Failed to delete user '$userName' by admin '${Application.crrUsername}': $e");
+      return false;
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nngasu_fqp_mobile/domain/role.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
 import 'package:nngasu_fqp_mobile/screen/editEquipment.dart';
 import 'package:nngasu_fqp_mobile/service/equipmentService.dart';
@@ -61,7 +62,7 @@ class _EquipmentListState extends State<EquipmentList> {
                     ],
                   ),
                   trailing: Visibility(
-                    visible: Application.isAdmin,
+                    visible: Application.crrUser.hasPriorityMoreThen(Role.ROLE_MODERATOR),
                     child: IconButton(
                       alignment: Alignment.centerRight,
                       icon: const Icon(Icons.edit, color: Application.nngasuBlueColor),
