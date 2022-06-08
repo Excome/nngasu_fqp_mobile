@@ -106,4 +106,17 @@ class RequestService {
       return Request(User("",""), "", []);
     }
   }
+
+  static Future<bool> deleteRequest(int id, String token) async {
+    try {
+      var url = '/requests/$id';
+      var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
+      var requestBody = <String, dynamic> {};
+      var responseBody = await HttpClient.delete(url, requestBody, headers: headersMap);
+      return true;
+    } catch (e) {
+      Application.logger.w("Failed to delete request with '$id' id: $e");
+      return false;
+    }
+  }
 }

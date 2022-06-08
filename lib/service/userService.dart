@@ -82,12 +82,25 @@ class UserService {
     try {
       var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
       var requestBody = <String, dynamic> {};
-      var response = await HttpClient.delete("/admin/users/$userName",requestBody, headers: headersMap);
+      var response = await HttpClient.delete("/admin/users/$userName", requestBody, headers: headersMap);
 
       return true;
     } catch (e) {
       Application.logger.e("Failed to delete user '$userName' by admin '${Application.crrUsername}': $e");
       return false;
+    }
+  }
+
+  static Future<User> editUserPass(User user, String token) async {
+    try {
+      var headersMap = {HttpHeaders.authorizationHeader: 'Bearer $token'};
+      var requestBody = user.toJson();
+      var response = await HttpClient.put("/users/${user.userName}/change-pass", requestBody, headers: headersMap);
+
+      return User.fromJson(response);
+    } catch (e) {
+      Application.logger.e("Failed to change password for user '${user.userName}' '${Application.crrUsername}': $e");
+      return User("", "");
     }
   }
 }

@@ -31,6 +31,7 @@ class Application extends StatelessWidget{
   static bool isAdmin = false;
   @override
   Widget build(BuildContext context) {
+    getServerUrlFromDb();
     return MaterialApp(
       title: 'NNGASU',
       debugShowCheckedModeBanner: false,
@@ -42,5 +43,15 @@ class Application extends StatelessWidget{
       home: token.isNotEmpty && crrUsername.isNotEmpty ? HomePage() : AuthPage(),
       // home: const HomePage(),
     );
+  }
+
+  void getServerUrlFromDb() async {
+    var authMap = await Application.db.collection("auth").doc(dbAuthId).get();
+    if (authMap != null && authMap != {}){
+      var srvUrl = authMap["serverUrl"];
+      if (srvUrl != null){
+        Application.serverUrl = srvUrl;
+      }
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:nngasu_fqp_mobile/domain/role.dart';
 import 'package:nngasu_fqp_mobile/domain/user.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
 import 'package:nngasu_fqp_mobile/screen/home.dart';
+import 'package:nngasu_fqp_mobile/screen/settings.dart';
 import 'package:nngasu_fqp_mobile/service/authService.dart';
 import 'package:nngasu_fqp_mobile/service/userService.dart';
 
@@ -246,6 +247,24 @@ class _AuthPageState extends State<AuthPage> {
     return Application.token.isNotEmpty
         ? HomePage()
         : Scaffold(
+            appBar: AppBar(
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                statusBarColor: Application.nngasuOrangeColor,
+                statusBarIconBrightness: Brightness.light,
+                statusBarBrightness: Brightness.light,
+              ),
+              title: const Text('ННГАСУ | ТРО'),
+              // leading: const Icon(Icons.home_rounded),
+              backgroundColor: Application.nngasuOrangeColor,
+              actions: [
+                IconButton(
+                  padding: const EdgeInsets.only(right: 10),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsPage())),
+                  icon: const Icon(Icons.settings, color: Colors.white),
+                  tooltip: "Настройки",
+                )
+              ],
+            ),
             backgroundColor: Theme.of(context).primaryColor,
             body: Application.token.isNotEmpty
                 ? HomePage()
@@ -297,7 +316,7 @@ class _AuthPageState extends State<AuthPage> {
                               ],
                             )),
                       _errorMesage(),
-                      _serverApi(),
+                      // _serverApi(),
                       _version()
                     ],
                   )));

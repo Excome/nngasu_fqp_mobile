@@ -7,6 +7,7 @@ import 'package:nngasu_fqp_mobile/screen/home.dart';
 import 'package:nngasu_fqp_mobile/service/requestService.dart';
 import 'package:nngasu_fqp_mobile/service/userService.dart';
 
+import '../component/confirmDialog.dart';
 import '../domain/equipment.dart';
 import '../domain/user.dart';
 import '../main.dart';
@@ -139,7 +140,30 @@ class _RequestDetailState extends State<RequestDetail> {
       backgroundColor: Colors.white,
         appBar: AppBar(
             title: const Text('ННГАСУ | ТРО'),
-            backgroundColor: Application.nngasuOrangeColor),
+            backgroundColor: Application.nngasuOrangeColor,
+          actions:  [
+            Visibility(
+            visible: isEditMode && Application.crrUser.hasPriorityMoreThen(Role.ROLE_MODERATOR),
+            child: IconButton(
+              padding: const EdgeInsets.only(right: 10),
+              onPressed: () {
+                showDialog(context: context, builder: (context) {
+                  return ConfirmDialog(
+                      title: "Удалить",
+                      description: "Вы уверены что хотите удалить данную заявку?",
+                      leftButtonText: "Отмена",
+                      lbOnPressed: () { Navigator.of(context).pop(); },
+                      rightButtonText: "Удалить",
+                      rbOnPressed: deleteRequest
+                  );
+                });
+              },
+              icon: const Icon(Icons.delete, color: Colors.white),
+              tooltip: "Настройки",
+            )
+        )
+      ],
+        ),
         body: SingleChildScrollView(
             child: Padding(
                 padding:
@@ -277,6 +301,13 @@ class _RequestDetailState extends State<RequestDetail> {
     if (response.id != 0) {
       request = response;
       setState(() => isEditMode = false);
+    }
+  }
+
+  deleteRequest() async {
+    var result = await RequestService.deleteRequest(request.id, Application.token);
+    if (result) {
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage(pageIndex: 0)), (route) => false);
     }
   }
 }

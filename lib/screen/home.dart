@@ -6,6 +6,7 @@ import 'package:nngasu_fqp_mobile/component/user-list.dart';
 import 'package:nngasu_fqp_mobile/domain/role.dart';
 import 'package:nngasu_fqp_mobile/main.dart';
 import 'package:nngasu_fqp_mobile/screen/createRequest.dart';
+import 'package:nngasu_fqp_mobile/screen/settings.dart';
 import 'package:nngasu_fqp_mobile/screen/userProfile.dart';
 
 import '../component/equipment-list.dart';
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                 visible: sectionIndex == 3,
                 child: IconButton(
                   padding: const EdgeInsets.only(right: 10),
-                  onPressed: () => {},
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsPage())),
                   icon: const Icon(Icons.settings, color: Colors.white),
                   tooltip: "Настройки",
                 )

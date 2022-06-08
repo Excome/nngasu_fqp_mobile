@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nngasu_fqp_mobile/component/request-list.dart';
 import 'package:nngasu_fqp_mobile/screen/authentication.dart';
+import 'package:nngasu_fqp_mobile/screen/editUserPassword.dart';
 import 'package:nngasu_fqp_mobile/screen/home.dart';
 import 'package:nngasu_fqp_mobile/service/userService.dart';
 
@@ -115,6 +116,13 @@ class _UserProfileState extends State<UserProfile> {
       child: RequestList(author: crrUser.userName));
   }
 
+  Dialog _responsibleRequestsDialog(BuildContext context) {
+    return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        elevation: 16,
+        child: RequestList(responsible: crrUser.userName));
+  }
+
   Dialog _exitDialog(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -183,11 +191,17 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Visibility(visible: !isEditMode, child: _menuButton("Изменить профиль", () => setState(() {isEditMode = true;}), Application.nngasuOrangeColor, 180))),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Visibility(visible: !isEditMode, child: _menuButton("Изменить пароль", () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EditUserPass())), Application.nngasuOrangeColor, 180))),
           ],
         ),
         Padding(
@@ -227,25 +241,18 @@ class _UserProfileState extends State<UserProfile> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
+            Visibility(
+              visible: Application.crrUser.hasPriorityMoreThen(Role.ROLE_TEACHER),
+              child: Padding(
                 padding:
                 const EdgeInsets.symmetric(horizontal: 5),
-                child: Visibility(visible: !isEditMode, child: _menuButton("Созданные заявки", () { showDialog(context: context, builder: (context) {return _myRequestsDialog(context);}); }, Application.nngasuOrangeColor, 180))),
-            Padding(
+                child: Visibility(visible: !isEditMode, child: _menuButton("Созданные заявки", () { showDialog(context: context, builder: (context) {return _myRequestsDialog(context);}); }, Application.nngasuOrangeColor, 180)))),
+            Visibility(
+              visible: Application.crrUser.hasPriorityMoreThen(Role.ROLE_TECHNICIAN),
+              child: Padding(
                 padding:
                 const EdgeInsets.symmetric(horizontal: 5),
-                child: Visibility(visible: !isEditMode, child: _menuButton("Рабочие заявки", () {  }, Application.nngasuOrangeColor, 180))),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Visibility(visible: !isEditMode, child: _menuButton("Изменить профиль", () {setState(() {isEditMode = true;});}, Application.nngasuOrangeColor, 180))),
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Visibility(visible: !isEditMode, child: _menuButton("Изменить пароль", () {}, Application.nngasuOrangeColor, 180))),
+                child: Visibility(visible: !isEditMode, child: _menuButton("Рабочие заявки", () {showDialog(context: context, builder: (context) => _responsibleRequestsDialog(context));}, Application.nngasuOrangeColor, 180)))),
           ],
         ),
              Row(
